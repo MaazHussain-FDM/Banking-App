@@ -34,10 +34,30 @@ pip install --upgrade pip
 pip install -r requirements.txt
 python manage.py migrate
 python manage.py createsuperuser
+```
+
+## 3) Run the application
+
+### Option A: Django development server
+
+```powershell
+.venv\Scripts\Activate.ps1
 python manage.py runserver
 ```
 
-## 3) Implemented architecture layers
+Open: `http://127.0.0.1:8000/` or `http://localhost:8000/`
+
+### Option B: Waitress (production-style local run)
+
+```powershell
+.venv\Scripts\Activate.ps1
+.\scripts\run_waitress.ps1 -ListenHost 0.0.0.0 -Port 8000
+```
+
+Open from same machine: `http://127.0.0.1:8000/`  
+(`0.0.0.0` is a bind address, not a browser URL.)
+
+## 4) Implemented architecture layers
 
 | Layer | Responsibility | Implementation |
 | --- | --- | --- |
@@ -49,7 +69,7 @@ python manage.py runserver
 | Quality analysis | Bugs, smells, vulnerabilities, coverage | `.github/workflows/sonar.yml` + `sonar-project.properties` |
 | Deployment | Windows app hosting | `scripts/run_waitress.ps1` and optional `install_nssm_service.ps1` |
 
-## 4) GitHub Actions pipeline
+## 5) GitHub Actions pipeline
 
 `ci.yml` performs:
 
@@ -58,7 +78,7 @@ python manage.py runserver
 3. Tests with coverage
 4. Coverage threshold enforcement (`--fail-under=80`)
 
-## 5) SonarQube/SonarCloud quality gate
+## 6) SonarQube/SonarCloud quality gate
 
 `sonar.yml` performs:
 
@@ -76,13 +96,13 @@ Also update `sonar-project.properties`:
 - `sonar.projectKey`
 - optionally add `sonar.organization` if using SonarCloud
 
-## 6) Windows deployment
+## 7) Windows deployment
 
 ### Run directly with Waitress
 
 ```powershell
 .venv\Scripts\Activate.ps1
-.\scripts\run_waitress.ps1 -Host 0.0.0.0 -Port 8000
+.\scripts\run_waitress.ps1 -ListenHost 0.0.0.0 -Port 8000
 ```
 
 ### Optional: run as a Windows Service (NSSM)
@@ -91,7 +111,7 @@ Also update `sonar-project.properties`:
 .\scripts\install_nssm_service.ps1 -NssmPath "C:\tools\nssm\nssm.exe"
 ```
 
-## 7) Merge/deploy decision workflow
+## 8) Merge/deploy decision workflow
 
 1. Push branch and open PR.
 2. CI workflow runs tests + coverage.
