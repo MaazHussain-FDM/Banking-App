@@ -1,0 +1,9 @@
+{% extends "banking/base.html" %}
+
+{% block content %}
+<h1>Account overview</h1>
+<p><strong>Username:</strong> {{ account.user.username }}</p>
+<p><strong>Balance:</strong> {{ account.balance }}</p>
+<p><a href="{% url 'transactions' %}">View transactions</a></p>
+{% endblock %}
+
